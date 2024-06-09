@@ -76,7 +76,35 @@ def replace_with_random_v2(word_pos,
 
     return new_random, to_be_changed
 
+def generate_new_samples(example_list
+                         ,vocab_to_sample
+                         ,length=3
+                        ,trials=5
+                        ,even_cut=False):
+    og_random_dict = {}
 
+    for original in example_list:
+        split_og_list = original.split()
+
+
+        if even_cut:
+            #cuts the list into even slices
+            pos_list = list(range(0,len(split_og_list),length))
+            #pdb.set_trace()
+        else:
+            pos_list = [0,1,2]
+
+        
+        og_random_dict[original] = {}
+        for position in pos_list:
+            new_sample, to_be_changed = replace_with_random_v2(position
+                                                ,split_og_list
+                                                ,unique_brown_vocab
+                                                ,length=length
+                                                ,trials=trials)
+            og_random_dict[original][(position,to_be_changed)] = {'new_sample':new_sample}
+            #og_random_dict[original].append([position,to_be_changed,new_sample])        
+    return og_random_dict   
 def get_local_model_pred(tokenizer
                          ,model
                          ,this_string
